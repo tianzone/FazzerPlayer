@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>qml/main.qml</file>
         <file>qml/audioModule/AudioModuleView.qml</file>
+        <file>qml/plugins/ImageKey.qml</file>
     </qresource>
 </RCC>

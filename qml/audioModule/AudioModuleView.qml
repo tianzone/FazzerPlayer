@@ -7,6 +7,12 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
+import "qrc:/qml/plugins"
+
+// Tianz debug
+//import QtWebKit 3.0
+
+
 Item{
     id: id_audioModuleView
 
@@ -16,66 +22,132 @@ Item{
     // Add the properties.
     property string currentAction: "0"
 
+    // Set the opacity
+    opacity: 1
+
     // Tianz debug
-    Rectangle{
-        id: id_testRect
+    // The web view.
+//    WebView{
+//        id: id_webView
 
-        color: "green"
+//        width: parent.width
 
-        width: 100
+//        anchors{
+//            top: parent.top
+//            bottom: id_keyControlBarRowLayout.top
+//            bottomMargin: 20
+//        }
+
+//        url: "www.baidu.com"
+//    }
+
+    // The key control bar
+    Row{
+        id: id_keyControlBarRowLayout
+
+        width: parent.width
         height: 100
-
-    }
-
-    // Populate the control tool bar.
-    RowLayout{
-        id: id_audioModuleViewRowLayout
         anchors{
-            left: parent.left
-            horizontalCenter: parent.horizontalCenter
-            fill: parent
+            bottom: parent.bottom
+            margins: 20
         }
 
-        Button{
-            id: id_setPreviousButton
-            width: parent.width / 6
+        // The key set
+        Rectangle{
+            id: id_keySetRect
 
-            text: qsTr( "Previous" )
+            width: parent.width / 4
+            height: 50
 
-            onClicked: currentAction = "1"
-        }
-        Button{
-            id: id_setReplayButton
-            width: parent.width / 6
+            anchors{
+                left: parent.left
+                verticalCenter: parent.verticalCenter
 
-            text: qsTr( "Replay" )
-
-            onClicked: currentAction = "2"
-        }
-        Button{
-            id: id_setContinueOrPauseButton
-            width: parent.width / 6
-
-            text: qsTr( "C & P" )
-
-            onClicked: {
-                if( currentAction == "3" ){
-                    currentAction = "4"
-                }else{
-                    currentAction = "3"
-                }
+            }
+            border{
+                color: "blue"
+                width: 2
             }
 
+            Row{
+                id: id_keySetRowLayout
+
+                anchors.fill: parent
+                spacing: 10
+
+                // The previous key
+                ImageKey{
+                    id: id_previousKey
+
+                    anchors{
+                        left: parent.left
+                    }
+
+                    text: qsTr( "P" )
+                    onClicked: cpp_AudioModule.SetControlAction( "1" )
+                }
+
+                // The pause/continue key.
+                ImageKey{
+                    id: id_pauseAndContinueKey
+
+                    // Record the last setting
+                    property string lastSetting: "P"
+
+                    anchors{
+                        horizontalCenter: parent.horizontalCenter
+                    }
+
+                    text: qsTr( "S/C" )
+                    onClicked: function(){
+                        var showStr = ""
+                        var setting = ""
+                        if( lastSetting == "P" ){
+                            lastSetting = "S"
+                            setting = "3"
+                            showStr = qsTr( "S" )
+                        }else{
+                            lastSetting = "P"
+                            setting = "4"
+                            showStr = "P"
+                        }
+
+                        cpp_AudioModule.SetControlAction( setting )
+                        id_pauseAndContinueKey.text = showStr
+                    }
+                }
+
+                // The next key.
+                ImageKey{
+                    id: id_nextKey
+
+                    anchors{
+                        right: parent.right
+                    }
+
+                    text: qsTr( "N" )
+                    onClicked: cpp_AudioModule.SetControlAction( "5" )
+                }
+            }
         }
-        Button{
-            id: id_setNextButton
-            width: parent.width / 6
 
-            text: qsTr( "Next" )
+        // The progress bar of the current song.
+        Slider{
+            id: id_sliderOfSong
 
-            onClicked: currentAction = "5"
+            width: parent.width / 2
+
+            anchors{
+                left: id_keySetRect.right
+                verticalCenter: parent.verticalCenter
+            }
+
+            from: 0
+            to: 100
+
+            onValueChanged: function(){
+                console.debug( "value:" + id_sliderOfSong.value )
+            }
         }
-
     }
-    onCurrentActionChanged: cpp_AudioModule.SetControlAction( currentAction )
 }

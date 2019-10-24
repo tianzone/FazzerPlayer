@@ -14,6 +14,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        app/FazzerPlayer.cpp \
+        app/audioModule/AudioModule.cpp \
         app/main.cpp
 
 RESOURCES += qml.qrc
@@ -30,6 +32,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    app/FazzerPlayer.h
+    app/FazzerPlayer.h \
+    app/audioModule/AudioModule.h
 
-DISTFILES +=
+DISTFILES += \
+    dev/notes/QuestionList.txt

@@ -1,0 +1,7 @@
+// The question list of the project. We should try our best to find out the answer.
+
+Q1: C++ 模块如何跟 QML 模块共用同一类型？（比如自定义的枚举型）
+
+Q2: QT 项目（project）如何自己写脚本进行编译（如使用 cmake 或者 scons）？而不是现在使用 QT Creator 的开发环境。
+
+Q3: QT 项目（project）如何做成发布（release）版本？使之成功运行在 windows 端和 Linux 端？

@@ -1,3 +1,10 @@
+//*****************************************************************************
+// File Name:  main.cpp
+// Copyright:  TIANZ, Inc. 2019. All rights reserved.
+//*****************************************************************************
+
+#include "FazzerPlayer.h"
+
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
@@ -19,6 +26,10 @@ int main(int argc, char *argv[])
         if (!obj && url == objUrl)
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
+
+    // Instantiate the FazzerPlater and register the necessary objects into the qml context.
+    FazzerPlayer player;
+    player.RegisterObjectsToQml( engine );
 
     // TODO: What's happen?
     engine.load(url);

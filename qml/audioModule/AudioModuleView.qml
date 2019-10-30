@@ -8,38 +8,13 @@ import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
 import "qrc:/qml/plugins"
-
-// Tianz debug
-//import QtWebKit 3.0
-
+import "qrc:/qml/audioModule/playControlBar"
 
 Item{
     id: id_audioModuleView
 
     // Set the anchors
     anchors.fill: parent
-
-    // Add the properties.
-    property string currentAction: "0"
-
-    // Set the opacity
-    opacity: 1
-
-    // Tianz debug
-    // The web view.
-//    WebView{
-//        id: id_webView
-
-//        width: parent.width
-
-//        anchors{
-//            top: parent.top
-//            bottom: id_keyControlBarRowLayout.top
-//            bottomMargin: 20
-//        }
-
-//        url: "www.baidu.com"
-//    }
 
     // The key control bar
     Row{
@@ -66,7 +41,7 @@ Item{
             }
             border{
                 color: "blue"
-                width: 2
+                width: 1
             }
 
             Row{
@@ -92,7 +67,7 @@ Item{
                     id: id_pauseAndContinueKey
 
                     // Record the last setting
-                    property string lastSetting: "P"
+                    property string lastSetting: "S"
 
                     anchors{
                         horizontalCenter: parent.horizontalCenter
@@ -106,10 +81,16 @@ Item{
                             lastSetting = "S"
                             setting = "3"
                             showStr = qsTr( "S" )
+
+                            // Stop the counter.
+                            id_audioPlayingTimer.stop()
                         }else{
                             lastSetting = "P"
                             setting = "4"
                             showStr = "P"
+
+                            // Start the counter.
+                            id_audioPlayingTimer.start()
                         }
 
                         cpp_AudioModule.SetControlAction( setting )
@@ -132,21 +113,27 @@ Item{
         }
 
         // The progress bar of the current song.
-        Slider{
-            id: id_sliderOfSong
+        PlayProgressBar{
+            id: id_playProgressBar
 
             width: parent.width / 2
-
+            height: parent.height
             anchors{
                 left: id_keySetRect.right
-                verticalCenter: parent.verticalCenter
             }
+        }
 
-            from: 0
-            to: 100
+        // Tianz debug
+        // Add a timer to update the time of the playing song.
+        Timer{
+            id: id_audioPlayingTimer
 
-            onValueChanged: function(){
-                console.debug( "value:" + id_sliderOfSong.value )
+            // Update every second.
+            interval: 1000
+            repeat: true
+
+            onTriggered: {
+                id_playProgressBar.mProgressValue += 1
             }
         }
     }

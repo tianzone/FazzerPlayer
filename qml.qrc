@@ -3,5 +3,6 @@
         <file>qml/main.qml</file>
         <file>qml/audioModule/AudioModuleView.qml</file>
         <file>qml/plugins/ImageKey.qml</file>
+        <file>qml/audioModule/playControlBar/PlayProgressBar.qml</file>
     </qresource>
 </RCC>
